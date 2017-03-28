@@ -2,6 +2,7 @@
 
 testEquality() {
     assertEquals 1 1
+    assertEquals 2 2
 }
 
 # Needed for zsh
