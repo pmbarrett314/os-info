@@ -1,6 +1,11 @@
 language: sh
 
 sudo: false
+
+os:
+  - linux
+  - osx
+
 before_script:
   - mkdir shunit2 && curl -L https://api.github.com/repos/kward/shunit2/tarball | tar -xz -C shunit2 --strip-components 1
 
