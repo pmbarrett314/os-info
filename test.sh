@@ -15,4 +15,6 @@ testOS() {
 # SHUNIT_PARENT=$0
 # setopt shwordsplit
 
+
+# shellcheck disable=SC1091
 . shunit2/source/2.1/src/shunit2
