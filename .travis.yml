@@ -20,7 +20,7 @@ before_install:
 
 before_script:
   - curl -L https://api.github.com/repos/kward/shunit2/tarball 
-  - mkdir shunit2 && tar -xzf -C shunit2 --strip-components 1 tarball
+  - mkdir shunit2 && tar -xzf tarball -C shunit2 --strip-components 1 
   - rm tarball
 
 script:
