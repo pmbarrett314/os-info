@@ -1,8 +1,13 @@
 #!/bin/sh
 
-testEquality() {
-    assertEquals 1 1
-    assertEquals 2 2
+. os_info.sh
+
+testOS() {
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    	assertEqual $(get_os) "macos"
+    elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+    	assertEqual $(get_os) "linux"
+    fi
 }
 
 # Needed for zsh
