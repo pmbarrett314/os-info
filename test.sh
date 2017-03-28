@@ -1,12 +1,13 @@
 #!/bin/sh
 
+# shellcheck disable=SC1091
 . os_info.sh
 
 testOS() {
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    	assertEquals "macos" $(get_os)
-    elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-    	assertEquals "Linux" $(get_os)
+    if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+    	assertEquals "macos" "$(get_os)"
+    elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
+    	assertEquals "Linux" "$(get_os)"
     fi
 }
 
