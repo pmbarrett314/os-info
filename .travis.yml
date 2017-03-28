@@ -18,8 +18,8 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install shellcheck; fi
 
 before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mkdir shunit2 && curl -LO https://api.github.com/repos/kward/shunit2/tarball | gunzip | tar -x -C shunit2 --strip-components 1; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then mkdir shunit2 && curl -LO https://api.github.com/repos/kward/shunit2/tarball | tar -xz -C shunit2 --strip-components 1; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mkdir shunit2 && curl -L https://api.github.com/repos/kward/shunit2/tarball | gunzip | tar -x -C shunit2 --strip-components 1; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then mkdir shunit2 && curl -L https://api.github.com/repos/kward/shunit2/tarball | tar -xz -C shunit2 --strip-components 1; fi
 
 script:
   - shellcheck os_info.sh
