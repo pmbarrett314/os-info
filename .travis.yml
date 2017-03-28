@@ -22,7 +22,7 @@ before_script:
   - curl -LO https://api.github.com/repos/kward/shunit2/tarball
   - mv tarball tarball.gz 
   - gunzip tarball.gz
-  - mkdir shunit2 && tar -xzf tarball -C shunit2 --strip-components 1
+  - mkdir shunit2 && tar -xf tarball -C shunit2 --strip-components 1
   - rm tarball.gz
   - rm tarball
 
