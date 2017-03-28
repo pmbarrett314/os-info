@@ -4,9 +4,9 @@
 
 testOS() {
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    	assertEquals $(get_os) "macos"
+    	assertEquals "macos" $(get_os)
     elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-    	assertEquals $(get_os) "linux"
+    	assertEquals "Linux" $(get_os)
     fi
 }
 
