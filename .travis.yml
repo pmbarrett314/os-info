@@ -19,7 +19,10 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install shellcheck; fi
 
 before_script:
-  - mkdir shunit2 && curl -L https://api.github.com/repos/kward/shunit2/tarball | tar -xz -C shunit2 --strip-components 1
+  - mkdir shunit2 
+  - curl -L https://api.github.com/repos/kward/shunit2/tarball 
+  - tar -xzf -C shunit2 --strip-components 1 tarball
+  - rm tarball
 
 script:
   - shellcheck os_info.sh
