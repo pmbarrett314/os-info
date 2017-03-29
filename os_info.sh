@@ -40,7 +40,7 @@ if [ -z "${OSTYPE+x}" ]; then
 	esac
 else
 	OS=$(uname -s)
-	echo "unknown: $OSTYPE"
+	echo "No OSTYPE"
 	echo "using OS value $OS"
 fi
 
