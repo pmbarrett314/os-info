@@ -13,6 +13,10 @@ GetVersionFromFile()
 
 # shellcheck disable=SC2039
 if [ -z "${OSTYPE+x}" ]; then
+	OS=$(uname -s)
+	echo "No OSTYPE"
+	echo "using OS value $OS"
+else
 	case $OSTYPE in
 		solaris*) 
 			OS="Solaris"
@@ -38,10 +42,6 @@ if [ -z "${OSTYPE+x}" ]; then
 			echo "using OS value $OS"
 			;;
 	esac
-else
-	OS=$(uname -s)
-	echo "No OSTYPE"
-	echo "using OS value $OS"
 fi
 
 REV=$(uname -r)
