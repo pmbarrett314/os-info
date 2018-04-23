@@ -8,7 +8,7 @@
 
 GetVersionFromFile()
 {
-	VERSION="$(tr "\n" ' ' < cat "$1" | sed s/.*VERSION.*=\ // )"
+	VERSION="$(tr "\\n" ' ' < cat "$1" | sed s/.*VERSION.*=\ // )"
 }
 
 # shellcheck disable=SC2039
@@ -61,8 +61,8 @@ elif [ "${OS}" = "Linux" ] ; then
 		PSUEDONAME=$(sed s/.*\(// < /etc/redhat-release | sed s/\)//)
 		REV=$(sed s/.*release\ // < /etc/redhat-release | sed s/\ .*//)
 	elif [ -f /etc/SuSE-release ] ; then
-		DIST=$(tr "\n" ' ' < /etc/SuSE-release | sed s/VERSION.*//)
-		REV=$(tr "\n" ' ' < /etc/SuSE-release| sed s/.*=\ //)
+		DIST=$(tr "\\n" ' ' < /etc/SuSE-release | sed s/VERSION.*//)
+		REV=$(tr "\\n" ' ' < /etc/SuSE-release| sed s/.*=\ //)
 	elif [ -f /etc/mandrake-release ] ; then
 		DIST='Mandrake'
 		PSUEDONAME=$(sed s/.*\(// < /etc/mandrake-release | sed s/\)//)
@@ -78,7 +78,7 @@ elif [ "${OS}" = "Linux" ] ; then
 		DIST="Arch"
 	fi
 	if [ -f /etc/UnitedLinux-release ] ; then
-		DIST="${DIST}[$(tr "\n" ' ' < /etc/UnitedLinux-release | sed s/VERSION.*//)]"
+		DIST="${DIST}[$(tr "\\n" ' ' < /etc/UnitedLinux-release | sed s/VERSION.*//)]"
 	fi
 
 	OSSTR="${OS} ${DIST} ${REV}(${PSUEDONAME} ${KERNEL} ${MACH})"
