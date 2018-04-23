@@ -68,7 +68,7 @@ elif [ "${OS}" = "Linux" ] ; then
 		PSUEDONAME=$(sed s/.*\(// < /etc/mandrake-release | sed s/\)//)
 		REV=$(sed s/.*release\ // < /etc/mandrake-release | sed s/\ .*//)
 	elif [ -f /etc/debian_version ] ; then	
-		if [ "$(awk -F= '/DISTRIB_ID/ {print $2}' /etc/lsb-release)" = "Ubuntu" ]; then
+		if [ -f /etc/lsb-release ] && [ "$(awk -F= '/DISTRIB_ID/ {print $2}' /etc/lsb-release)" = "Ubuntu" ]; then
 			DIST="Ubuntu"
 		else
 			DIST="Debian $(cat /etc/debian_version)"
@@ -98,4 +98,12 @@ get_version(){
 
 get_osstr(){
 	echo "${OSSTR}"
+}
+
+is_root() {
+	[ "$(id -u)" -eq 0 ]
+}
+
+can_sudo(){
+	A=$(sudo -n -v 2>&1);test -z "$A" || echo "$A"|grep -q asswor
 }
