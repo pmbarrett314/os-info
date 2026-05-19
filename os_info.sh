@@ -86,10 +86,6 @@ get_os() {
 	echo "${OS}"
 }
 
-get_version(){
-	echo "${VERSION}"
-}
-
 get_osstr(){
 	echo "${OSSTR}"
 }
