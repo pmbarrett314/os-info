@@ -5,15 +5,6 @@
 
 
 
-
-<<<<<<< Updated upstream
-GetVersionFromFile()
-{
-	VERSION="$(tr "\\n" ' ' < cat "$1" | sed s/.*VERSION.*=\ // )"
-}
-
-=======
->>>>>>> Stashed changes
 # shellcheck disable=SC2039
 if [ -z "${OSTYPE+x}" ]; then
 	OS=$(uname -s)
