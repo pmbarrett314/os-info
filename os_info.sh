@@ -1,99 +1,42 @@
 #!/bin/sh
-# Detects which OS and if it is Linux then it will detect which Linux
-# Distribution.
-# http://linuxmafia.com/faq/Admin/release-files.html
+# LEGACY: this dependency is being retired.
 
+echo "[os-info] sourced — legacy dependency, migrate off it" >&2
 
-
-# shellcheck disable=SC2039
-if [ -z "${OSTYPE+x}" ]; then
-	OS=$(uname -s)
-	echo "No OSTYPE"
-	echo "using OS value $OS"
-else
-	case $OSTYPE in
-		solaris*) 
-			OS="Solaris"
-			;;
-	  	darwin*)  
-			OS="macos"
-			;; 
-	  	linux*)   
-			OS="Linux"
-			;;
-	  	bsd*)     
-			OS="bsd" 
-			;;
-	  	msys*)    
-			OS="msys" 
-			;;
-		cygwin*)    
-			OS="cygwin" 
-			;;
-	  	*)    
-	  		OS=$(uname -s)
-			echo "unknown: $OSTYPE"
-			echo "using OS value $OS"
-			;;
-	esac
-fi
+# Output casing is kept as-is for backward compatibility with existing
+# consumers — do not "fix" it here; normalize at the call site instead.
+case "$(uname -s)" in
+	Darwin)       OS="macos"   ;;
+	Linux)        OS="Linux"   ;;
+	*BSD)         OS="bsd"     ;;
+	CYGWIN*)      OS="cygwin"  ;;
+	MINGW*|MSYS*) OS="msys"    ;;
+	SunOS)        OS="Solaris" ;;
+	*)            OS="$(uname -s)" ;;
+esac
 
 REV=$(uname -r)
 MACH=$(uname -m)
+DIST=""
 
-
-if [ "${OS}" = "SunOS" ] ; then
-	OS=Solaris
-	ARCH=$(uname -p)
-	OSSTR="${OS} ${REV}(${ARCH} $(uname -v)"
-elif [ "${OS}" = "AIX" ] ; then
-	OSSTR="${OS} $(oslevel) ($(oslevel -r)"
-elif [ "${OS}" = "Linux" ] ; then
-	KERNEL=$(uname -r)
-	if [ -f /etc/redhat-release ] ; then
-		DIST='RedHat'
-		PSUEDONAME=$(sed s/.*\(// < /etc/redhat-release | sed s/\)//)
-		REV=$(sed s/.*release\ // < /etc/redhat-release | sed s/\ .*//)
-	elif [ -f /etc/SuSE-release ] ; then
-		DIST=$(tr "\\n" ' ' < /etc/SuSE-release | sed s/VERSION.*//)
-		REV=$(tr "\\n" ' ' < /etc/SuSE-release| sed s/.*=\ //)
-	elif [ -f /etc/mandrake-release ] ; then
-		DIST='Mandrake'
-		PSUEDONAME=$(sed s/.*\(// < /etc/mandrake-release | sed s/\)//)
-		REV=$(sed s/.*release\ // < /etc/mandrake-release | sed s/\ .*//)
-	elif [ -f /etc/debian_version ] ; then	
-		if [ -f /etc/lsb-release ] && [ "$(awk -F= '/DISTRIB_ID/ {print $2}' /etc/lsb-release)" = "Ubuntu" ]; then
-			DIST="Ubuntu"
-		else
-			DIST="Debian $(cat /etc/debian_version)"
-			REV=""
-		fi
-	elif [ -f /etc/arch-release ] ; then
-		DIST="Arch"
-	fi
-	if [ -f /etc/UnitedLinux-release ] ; then
-		DIST="${DIST}[$(tr "\\n" ' ' < /etc/UnitedLinux-release | sed s/VERSION.*//)]"
-	fi
-
-	OSSTR="${OS} ${DIST} ${REV}(${PSUEDONAME} ${KERNEL} ${MACH})"
+if [ "$OS" = "Linux" ] && [ -r /etc/os-release ]; then
+	# shellcheck disable=SC1091
+	DIST=$(. /etc/os-release 2>/dev/null && printf '%s' "${ID:-}")
 fi
 
-get_distro() {
-	echo "${DIST}"
-}
+if [ -n "$DIST" ]; then
+	OSSTR="$OS $DIST $REV ($MACH)"
+else
+	OSSTR="$OS $REV ($MACH)"
+fi
 
-get_os() {
-	echo "${OS}"
-}
+get_os()     { echo "$OS"; }
+get_distro() { echo "$DIST"; }
+get_osstr()  { echo "$OSSTR"; }
 
-get_osstr(){
-	echo "${OSSTR}"
-}
+is_root() { [ "$(id -u)" -eq 0 ]; }
 
-is_root() {
-	[ "$(id -u)" -eq 0 ]
-}
-
-can_sudo(){
-	A=$(sudo -n -v 2>&1);test -z "$A" || echo "$A"|grep -q asswor
+# True when sudo can run without prompting for a password.
+can_sudo() {
+	command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null
 }
